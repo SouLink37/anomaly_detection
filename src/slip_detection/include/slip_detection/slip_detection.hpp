@@ -1,3 +1,5 @@
+#include <mutex>
+#include <queue>
 #include <rclcpp/rclcpp.hpp>
 #include <message_filters/subscriber.h>
 #include <message_filters/time_synchronizer.h>
@@ -6,6 +8,7 @@
 #include "slip_detection/options.hpp"
 #include "slip_detection/pose.hpp"
 #include "slip_detection/format_and_math.hpp"
+#include "slip_detection/msgs_type.hpp"
 
 
 
@@ -18,6 +21,8 @@ namespace anomaly_detection
     typedef message_filters::sync_policies::ApproximateTime
             <nav_msgs::msg::Odometry, geometry_msgs::msg::PoseStamped, sensor_msgs::msg::Imu> odom_lo_imu_sync_policy;
     typedef message_filters::Synchronizer<odom_lo_imu_sync_policy> odom_lo_imu_sync;
+    using msgs_type = MessageType_ODOM_LO_IMU;
+    
 
     class SlipDetection : public rclcpp::Node
     {
@@ -41,10 +46,13 @@ namespace anomaly_detection
         // std::shared_ptr<odom_lo_sync> sync_;
         std::shared_ptr<odom_lo_imu_sync> sync_;
 
-
         anomaly_detection::Options options_;
         bool initialized_ = false;
 
+        rclcpp::SubscriptionOptions sub_options_;
+        rclcpp::CallbackGroup::SharedPtr sync_callback_group_;
+        rclcpp::CallbackGroup::SharedPtr timer_callback_group_;
+        
         rclcpp::Time last_pose_time_;
         rclcpp::Time current_pose_time_;
 
@@ -54,6 +62,10 @@ namespace anomaly_detection
         anomaly_detection::Pose<Orietation_xyzw> current_pose_lo_; //lidar odometry
         anomaly_detection::Pose<Orietation_xyz> intergtated_pose_imu_;
 
+        std::queue<msgs_type> msgs_queue_;
+        std::mutex msgs_que_mtx_;
+
+        // velocity last_imu_velocity_;
     };
 } // namespace slip_detection
 

@@ -6,17 +6,25 @@
 #include "slip_detection/pose.hpp"
 #include "slip_detection/options.hpp"
 
+
 namespace anomaly_detection
-{
+{   
+    // using velocity = anomaly_detection::Position;
+
     void msg_transform(const nav_msgs::msg::Odometry::ConstSharedPtr odom_msg, 
                        anomaly_detection::Pose<Orietation_xyzw> &pose);
     void msg_transform(const geometry_msgs::msg::PoseStamped::ConstSharedPtr pose_msg, 
                        anomaly_detection::Pose<Orietation_xyzw> &pose);
 
+    // void calculate_imu_integration(const sensor_msgs::msg::Imu::ConstSharedPtr imu_msg,
+    //                                anomaly_detection::Pose<Orietation_xyz> &intergtated_pose_imu,
+    //                                const rclcpp::Time last_pose_time, 
+    //                                const rclcpp::Time current_pose_time,
+    //                                velocity &last_imu_velocity);
     void calculate_imu_integration(const sensor_msgs::msg::Imu::ConstSharedPtr imu_msg,
                                    anomaly_detection::Pose<Orietation_xyz> &intergtated_pose_imu,
-                                   const rclcpp::Time last_pose_time_, 
-                                   const rclcpp::Time current_pose_time_);
+                                   const rclcpp::Time last_pose_time, 
+                                   const rclcpp::Time current_pose_time);
 
     void calculate_pose_diff_2d(anomaly_detection::PoseDifference &pose_difference, 
                                 const anomaly_detection::Pose<Orietation_xyzw> &pose_1, 
@@ -25,13 +33,17 @@ namespace anomaly_detection
     void calculate_pose_diff_2d(anomaly_detection::PoseDifference &pose_difference_imu, 
                                 const anomaly_detection::Pose<Orietation_xyz> &intergtated_pose_imu_);
 
+    auto pose_diff_2d_per_sec(const anomaly_detection::PoseDifference &pose_difference, 
+                              const rclcpp::Time last_pose_time, 
+                              const rclcpp::Time current_pose_time) 
+                              -> anomaly_detection::PoseDifference;
+
     bool compair_diff_2d(const anomaly_detection::Options &options,
                          const anomaly_detection::PoseDifference &pose_difference_1, 
                          const anomaly_detection::PoseDifference &pose_difference_2);
 
     double yaw_angle_diff(const anomaly_detection::Pose<Orietation_xyzw> &pose_1, 
                           const anomaly_detection::Pose<Orietation_xyzw> &pose_2);
-    double dot_2d(const anomaly_detection::Pose<Orietation_xyzw> &pose_1, 
-                  const anomaly_detection::Pose<Orietation_xyzw> &pose_2);
+    double compute_yaw(const anomaly_detection::Orietation_xyzw &orientation);
 
 } // namespace anomaly_detection

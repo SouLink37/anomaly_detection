@@ -11,6 +11,9 @@ namespace anomaly_detection
     {
         uint16_t period{1000};          //ms
         PoseDifference accepted_diff{3.0, 3.0};     //m, rad
+        bool print_timestamps{false};
+        bool use_lidar_odom{false};
+        bool show_diff{false};
     };
 } // namespace slip_detection
 
