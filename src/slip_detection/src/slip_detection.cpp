@@ -49,7 +49,7 @@ using namespace anomaly_detection;
             static_cast<rclcpp::Time>(imu_msg->header.stamp).seconds());        
         }
 
-        std::unique_lock<std::mutex> lock(msgs_que_mtx_);
+        std::unique_lock<std::mutex> lock_msgs(msgs_que_mtx_);
         msgs_queue_.push({odom_msg, imu_msg});
     }
 
@@ -57,44 +57,52 @@ using namespace anomaly_detection;
     void SlipDetection::timer_callback()
     {   
         {
-            std::unique_lock<std::mutex> lock(msgs_que_mtx_);
-
+            std::unique_lock<std::mutex> lock_msgs(msgs_que_mtx_);
             if (msgs_queue_.empty()) return;
 
-            imu_ = std::make_shared<anomaly_detection::IMU>();
-
+            std::unique_lock<std::mutex> lock_exec(exec_que_mtx_);
             while (!msgs_queue_.empty())
             {
+                exec_queue_.push(msgs_queue_.front());
+                msgs_queue_.pop();
+            }
+        }
+
+        {   
+            std::unique_lock<std::mutex> lock_exec(exec_que_mtx_);
+            imu_ = std::make_shared<anomaly_detection::IMU>();
+
+            while (!exec_queue_.empty())
+            {   
                 if(!initialized_)
                 {   
-                    last_pose_time_ = msgs_queue_.front().imu_msg->header.stamp;
+                    last_pose_time_ = exec_queue_.front().imu_msg->header.stamp;
                     last_imu_time_ = last_pose_time_;
-                    last_odom_time_ = msgs_queue_.front().odom_msg->header.stamp;
-                    odom_velocity_ = get_vel_from_odom(msgs_queue_.front().odom_msg);
-                    msg_transform(msgs_queue_.front().odom_msg, last_pose_odom_);
+                    last_odom_time_ = exec_queue_.front().odom_msg->header.stamp;
+                    odom_velocity_ = get_vel_from_odom(exec_queue_.front().odom_msg);
+                    msg_transform(exec_queue_.front().odom_msg, last_pose_odom_);
 
                     initialized_ = true;
                     return;
                 }
 
-                current_pose_time_ = msgs_queue_.front().imu_msg->header.stamp;
+                current_pose_time_ = exec_queue_.front().imu_msg->header.stamp;
                 current_imu_time_ = current_pose_time_;
-                current_odom_time_ = msgs_queue_.front().odom_msg->header.stamp;
+                current_odom_time_ = exec_queue_.front().odom_msg->header.stamp;
                 
                 if (current_odom_time_.seconds() - last_odom_time_.seconds() > 0.5)
                 {
-                    odom_velocity_ = get_vel_from_odom(msgs_queue_.front().odom_msg);
+                    odom_velocity_ = get_vel_from_odom(exec_queue_.front().odom_msg);
                 }
-                imu_->imu_intergration(msgs_queue_.front().imu_msg, intergtated_pose_imu_, last_imu_time_, current_imu_time_, odom_velocity_);
-                // calculate_imu_integration(msgs_queue_.front().imu_msg, intergtated_pose_imu_, last_pose_time_, current_pose_time_);
+                imu_->imu_intergration(exec_queue_.front().imu_msg, intergtated_pose_imu_, last_imu_time_, current_imu_time_, odom_velocity_);
                 
-                if (msgs_queue_.size() == 1)
+                if (exec_queue_.size() == 1)
                 {
-                    msg_transform(msgs_queue_.front().odom_msg, current_pose_odom_);
+                    msg_transform(exec_queue_.front().odom_msg, current_pose_odom_);
                 }
 
                 last_imu_time_ = current_pose_time_;
-                msgs_queue_.pop();
+                exec_queue_.pop();
             }      
         }
 

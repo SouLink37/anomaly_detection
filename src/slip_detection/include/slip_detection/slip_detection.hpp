@@ -56,7 +56,9 @@ namespace anomaly_detection
         anomaly_detection::Pose<Orietation_xyz> intergtated_pose_imu_;
 
         std::queue<MessageType_ODOM_IMU> msgs_queue_;
+        std::queue<MessageType_ODOM_IMU> exec_queue_;
         std::mutex msgs_que_mtx_;
+        std::mutex exec_que_mtx_;
 
         std::shared_ptr<anomaly_detection::IMU> imu_;
         anomaly_detection::Velocity odom_velocity_;
