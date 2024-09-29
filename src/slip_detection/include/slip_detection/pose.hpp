@@ -15,6 +15,10 @@ namespace anomaly_detection
         }
     };
 
+        
+    using Velocity = Position;
+    using Orietation_xyz = Position;
+
     struct Orietation_xyzw
     {
         double x{0.0};
@@ -25,18 +29,6 @@ namespace anomaly_detection
         void reset()
         {
             x = 0.0; y = 0.0; z = 0.0; w = 1.0;
-        }
-    };
-
-    struct Orietation_xyz
-    {
-        double x{0.0};
-        double y{0.0};
-        double z{0.0};
-
-        void reset()
-        {
-            x = 0.0; y = 0.0; z = 0.0;
         }
     };
 

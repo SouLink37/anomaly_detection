@@ -31,39 +31,18 @@ void anomaly_detection::msg_transform(const geometry_msgs::msg::PoseStamped::Con
 // void anomaly_detection::calculate_imu_integration(const sensor_msgs::msg::Imu::ConstSharedPtr imu_msg,
 //                                                   anomaly_detection::Pose<Orietation_xyz> &intergtated_pose_imu,
 //                                                   const rclcpp::Time last_pose_time, 
-//                                                   const rclcpp::Time current_pose_time,
-//                                                   velocity &last_imu_velocity)
+//                                                   const rclcpp::Time current_pose_time)
 // {
 //     double dt = (current_pose_time - last_pose_time).seconds(); 
 
-//     intergtated_pose_imu.position.x += 0.5 * imu_msg->linear_acceleration.x * dt * dt + last_imu_velocity.x * dt; 
-//     intergtated_pose_imu.position.y += 0.5 * imu_msg->linear_acceleration.y * dt * dt + last_imu_velocity.y * dt;
-//     intergtated_pose_imu.position.z += 0.5 * imu_msg->linear_acceleration.z * dt * dt + last_imu_velocity.z * dt;
-
-//     last_imu_velocity.x += imu_msg->linear_acceleration.x * dt;
-//     last_imu_velocity.y += imu_msg->linear_acceleration.y * dt;
-//     last_imu_velocity.z += imu_msg->linear_acceleration.z * dt;
+//     intergtated_pose_imu.position.x += 0.5 * imu_msg->linear_acceleration.x * dt * dt * 9.8; 
+//     intergtated_pose_imu.position.y += 0.5 * imu_msg->linear_acceleration.y * dt * dt * 9.8;
+//     intergtated_pose_imu.position.z += 0.5 * (imu_msg->linear_acceleration.z - 1)  * dt * dt * 9.8;
 
 //     intergtated_pose_imu.orientation.x += imu_msg->angular_velocity.x * dt;
 //     intergtated_pose_imu.orientation.y += imu_msg->angular_velocity.y * dt;
 //     intergtated_pose_imu.orientation.z += imu_msg->angular_velocity.z * dt;
 // }
-
-void anomaly_detection::calculate_imu_integration(const sensor_msgs::msg::Imu::ConstSharedPtr imu_msg,
-                                                  anomaly_detection::Pose<Orietation_xyz> &intergtated_pose_imu,
-                                                  const rclcpp::Time last_pose_time, 
-                                                  const rclcpp::Time current_pose_time)
-{
-    double dt = (current_pose_time - last_pose_time).seconds(); 
-
-    intergtated_pose_imu.position.x += 0.5 * imu_msg->linear_acceleration.x * dt * dt ; 
-    intergtated_pose_imu.position.y += 0.5 * imu_msg->linear_acceleration.y * dt * dt ;
-    intergtated_pose_imu.position.z += 0.5 * imu_msg->linear_acceleration.z * dt * dt ;
-
-    intergtated_pose_imu.orientation.x += imu_msg->angular_velocity.x * dt;
-    intergtated_pose_imu.orientation.y += imu_msg->angular_velocity.y * dt;
-    intergtated_pose_imu.orientation.z += imu_msg->angular_velocity.z * dt;
-}
 
 void anomaly_detection::calculate_pose_diff_2d(anomaly_detection::PoseDifference &pose_difference, 
                                                const anomaly_detection::Pose<Orietation_xyzw> &pose_1, 
@@ -88,7 +67,7 @@ bool anomaly_detection::compair_diff_2d(const anomaly_detection::Options &option
     double linear_diff = pose_difference_1.linear - pose_difference_2.linear;
     double angle_diff = pose_difference_1.angle - pose_difference_2.angle;
 
-    bool linear_condition = (linear_diff > options.accepted_diff.linear) && (pose_difference_2.linear > 0.04);
+    bool linear_condition = linear_diff > options.accepted_diff.linear;
     bool angle_condition = angle_diff > options.accepted_diff.angle;
 
     if (linear_condition || angle_condition) return true;
@@ -129,5 +108,12 @@ double anomaly_detection::yaw_angle_diff(const anomaly_detection::Pose<Orietatio
 // {
 //     return fabs(pose_1.orientation.z - pose_2.orientation.z);
 // }
+
+auto anomaly_detection::get_vel_from_odom(const nav_msgs::msg::Odometry::ConstSharedPtr odom_msg) -> anomaly_detection::Velocity
+{
+    return {odom_msg->twist.twist.linear.x,
+            odom_msg->twist.twist.linear.y,
+            odom_msg->twist.twist.linear.z};
+}
 
 

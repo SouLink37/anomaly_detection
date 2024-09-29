@@ -19,12 +19,7 @@ namespace anomaly_detection
     // void calculate_imu_integration(const sensor_msgs::msg::Imu::ConstSharedPtr imu_msg,
     //                                anomaly_detection::Pose<Orietation_xyz> &intergtated_pose_imu,
     //                                const rclcpp::Time last_pose_time, 
-    //                                const rclcpp::Time current_pose_time,
-    //                                velocity &last_imu_velocity);
-    void calculate_imu_integration(const sensor_msgs::msg::Imu::ConstSharedPtr imu_msg,
-                                   anomaly_detection::Pose<Orietation_xyz> &intergtated_pose_imu,
-                                   const rclcpp::Time last_pose_time, 
-                                   const rclcpp::Time current_pose_time);
+    //                                const rclcpp::Time current_pose_time);
 
     void calculate_pose_diff_2d(anomaly_detection::PoseDifference &pose_difference, 
                                 const anomaly_detection::Pose<Orietation_xyzw> &pose_1, 
@@ -46,4 +41,5 @@ namespace anomaly_detection
                           const anomaly_detection::Pose<Orietation_xyzw> &pose_2);
     double compute_yaw(const anomaly_detection::Orietation_xyzw &orientation);
 
+    auto get_vel_from_odom(const nav_msgs::msg::Odometry::ConstSharedPtr odom_msg) -> anomaly_detection::Velocity;
 } // namespace anomaly_detection

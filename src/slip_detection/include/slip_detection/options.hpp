@@ -2,6 +2,7 @@
 #define SLIP_DETECTION__OPTIONS_HPP
 
 #include <cstdint>
+#include <string>
 
 #include "slip_detection/pose.hpp"
 
