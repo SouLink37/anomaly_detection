@@ -48,6 +48,8 @@ namespace anomaly_detection
         rclcpp::Time current_pose_time_;
         rclcpp::Time last_odom_time_;
         rclcpp::Time current_odom_time_;
+        rclcpp::Time last_imu_time_;
+        rclcpp::Time current_imu_time_;
 
         anomaly_detection::Pose<Orietation_xyzw> last_pose_odom_;
         anomaly_detection::Pose<Orietation_xyzw> current_pose_odom_;

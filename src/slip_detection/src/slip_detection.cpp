@@ -18,7 +18,7 @@ using namespace anomaly_detection;
         this->get_parameter("threshold_linear", options_.accepted_diff.linear);
         this->get_parameter("threshold_angle", options_.accepted_diff.angle);
 
-
+        
         sync_callback_group_ = this->create_callback_group(rclcpp::CallbackGroupType::Reentrant);
         timer_callback_group_ = this->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
 
@@ -58,13 +58,17 @@ using namespace anomaly_detection;
     {   
         {
             std::unique_lock<std::mutex> lock(msgs_que_mtx_);
-        
+
             if (msgs_queue_.empty()) return;
+
+            imu_ = std::make_shared<anomaly_detection::IMU>();
+
             while (!msgs_queue_.empty())
             {
                 if(!initialized_)
                 {   
                     last_pose_time_ = msgs_queue_.front().imu_msg->header.stamp;
+                    last_imu_time_ = last_pose_time_;
                     last_odom_time_ = msgs_queue_.front().odom_msg->header.stamp;
                     odom_velocity_ = get_vel_from_odom(msgs_queue_.front().odom_msg);
                     msg_transform(msgs_queue_.front().odom_msg, last_pose_odom_);
@@ -74,14 +78,14 @@ using namespace anomaly_detection;
                 }
 
                 current_pose_time_ = msgs_queue_.front().imu_msg->header.stamp;
+                current_imu_time_ = current_pose_time_;
                 current_odom_time_ = msgs_queue_.front().odom_msg->header.stamp;
                 
                 if (current_odom_time_.seconds() - last_odom_time_.seconds() > 0.5)
                 {
                     odom_velocity_ = get_vel_from_odom(msgs_queue_.front().odom_msg);
                 }
-                imu_ = std::make_shared<anomaly_detection::IMU>();
-                imu_->imu_intergration(msgs_queue_.front().imu_msg, intergtated_pose_imu_, last_pose_time_, current_pose_time_, odom_velocity_);
+                imu_->imu_intergration(msgs_queue_.front().imu_msg, intergtated_pose_imu_, last_imu_time_, current_imu_time_, odom_velocity_);
                 // calculate_imu_integration(msgs_queue_.front().imu_msg, intergtated_pose_imu_, last_pose_time_, current_pose_time_);
                 
                 if (msgs_queue_.size() == 1)
@@ -89,6 +93,7 @@ using namespace anomaly_detection;
                     msg_transform(msgs_queue_.front().odom_msg, current_pose_odom_);
                 }
 
+                last_imu_time_ = current_pose_time_;
                 msgs_queue_.pop();
             }      
         }

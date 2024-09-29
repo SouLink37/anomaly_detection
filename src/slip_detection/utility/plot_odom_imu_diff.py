@@ -158,10 +158,19 @@ def plot_data(timestamps, imu_linear_diffs, imu_angle_diffs, odom_linear_diffs, 
 # filename = '/home/gechai/下载/27.09/1.5代样机---打滑数据采集---rom1105+driver2636/圆管---触发打滑---打滑开始时开始slip话题，结束slip话题后再结束录包/2.0cm/self/self-0926-190937/diff_2.txt'
 # filename = '/home/gechai/下载/27.09/1.5代样机---打滑数据采集---rom1105+driver2636/圆管---触发打滑---打滑开始时开始slip话题，结束slip话题后再结束录包/2.0cm/self/self-0926-190937/diff_3.txt'
 # filename = '/home/gechai/下载/27.09/1.5代样机---打滑数据采集---rom1105+driver2636/圆管---触发打滑---打滑开始时开始slip话题，结束slip话题后再结束录包/2.0cm/self/self-0926-190937/diff_4.txt'
+# filename = '/home/gechai/下载/27.09/1.5代样机---打滑数据采集---rom1105+driver2636/圆管---触发打滑---打滑开始时开始slip话题，结束slip话题后再结束录包/2.0cm/self/self-0926-190937/diff_5.txt'
+filename = '/home/gechai/下载/27.09/1.5代样机---打滑数据采集---rom1105+driver2636/圆管---触发打滑---打滑开始时开始slip话题，结束slip话题后再结束录包/2.0cm/self/self-0926-190937/diff_6.txt'
 
 # filename = '/home/gechai/下载/27.09/1.5代样机---打滑数据采集---rom1105+driver2636/斜坡---没有触发打滑/8度---没有触发打滑---slip刚刚开始上斜坡时录制，在斜坡上结束slip录制/self/self-0926-192620/diff.txt'
 
-filename = '/home/gechai/下载/27.09/1.5代样机---打滑数据采集---rom1105+driver2636/斜坡---没有触发打滑/15度---没有触发打滑---slip刚刚开始上斜坡时录制，在斜坡上结束slip录制/self/self-0926-192213/diff.txt'
+# filename = '/home/gechai/下载/27.09/1.5代样机---打滑数据采集---rom1105+driver2636/斜坡---没有触发打滑/15度---没有触发打滑---slip刚刚开始上斜坡时录制，在斜坡上结束slip录制/self/self-0926-192213/diff.txt'
+
+# filename = '/home/gechai/下载/27.09/1.5代样机---打滑数据采集---rom1105+driver2636/后退---触发打滑---打滑开始时开始slip话题，结束slip话题后再结束录包/self/self-0926-185600/diff.txt'
+# filename = '/home/gechai/下载/27.09/1.5代样机---打滑数据采集---rom1105+driver2636/后退---触发打滑---打滑开始时开始slip话题，结束slip话题后再结束录包/self/self-0926-185600/diff_1.txt'
+# filename = '/home/gechai/下载/27.09/1.5代样机---打滑数据采集---rom1105+driver2636/后退---触发打滑---打滑开始时开始slip话题，结束slip话题后再结束录包/self/self-0926-185600/diff_2.txt'
+# filename = '/home/gechai/下载/27.09/1.5代样机---打滑数据采集---rom1105+driver2636/后退---触发打滑---打滑开始时开始slip话题，结束slip话题后再结束录包/self/self-0926-185600/diff_3.txt'
+
+
 
 
 
