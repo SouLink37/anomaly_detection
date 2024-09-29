@@ -16,11 +16,6 @@ namespace anomaly_detection
     void msg_transform(const geometry_msgs::msg::PoseStamped::ConstSharedPtr pose_msg, 
                        anomaly_detection::Pose<Orietation_xyzw> &pose);
 
-    // void calculate_imu_integration(const sensor_msgs::msg::Imu::ConstSharedPtr imu_msg,
-    //                                anomaly_detection::Pose<Orietation_xyz> &intergtated_pose_imu,
-    //                                const rclcpp::Time last_pose_time, 
-    //                                const rclcpp::Time current_pose_time);
-
     void calculate_pose_diff_2d(anomaly_detection::PoseDifference &pose_difference, 
                                 const anomaly_detection::Pose<Orietation_xyzw> &pose_1, 
                                 const anomaly_detection::Pose<Orietation_xyzw> &pose_2);

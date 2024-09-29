@@ -28,22 +28,6 @@ void anomaly_detection::msg_transform(const geometry_msgs::msg::PoseStamped::Con
     pose.orientation.w = pose_msg->pose.orientation.w;
 }
 
-// void anomaly_detection::calculate_imu_integration(const sensor_msgs::msg::Imu::ConstSharedPtr imu_msg,
-//                                                   anomaly_detection::Pose<Orietation_xyz> &intergtated_pose_imu,
-//                                                   const rclcpp::Time last_pose_time, 
-//                                                   const rclcpp::Time current_pose_time)
-// {
-//     double dt = (current_pose_time - last_pose_time).seconds(); 
-
-//     intergtated_pose_imu.position.x += 0.5 * imu_msg->linear_acceleration.x * dt * dt * 9.8; 
-//     intergtated_pose_imu.position.y += 0.5 * imu_msg->linear_acceleration.y * dt * dt * 9.8;
-//     intergtated_pose_imu.position.z += 0.5 * (imu_msg->linear_acceleration.z - 1)  * dt * dt * 9.8;
-
-//     intergtated_pose_imu.orientation.x += imu_msg->angular_velocity.x * dt;
-//     intergtated_pose_imu.orientation.y += imu_msg->angular_velocity.y * dt;
-//     intergtated_pose_imu.orientation.z += imu_msg->angular_velocity.z * dt;
-// }
-
 void anomaly_detection::calculate_pose_diff_2d(anomaly_detection::PoseDifference &pose_difference, 
                                                const anomaly_detection::Pose<Orietation_xyzw> &pose_1, 
                                                const anomaly_detection::Pose<Orietation_xyzw> &pose_2)

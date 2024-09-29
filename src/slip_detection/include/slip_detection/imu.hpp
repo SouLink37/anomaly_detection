@@ -42,7 +42,11 @@ namespace anomaly_detection
             velocity = eigen2xyz(v_);
             intergtated_pose_imu.position.x = p_[0];
             intergtated_pose_imu.position.y = p_[1];   
-            intergtated_pose_imu.position.z = p_[2];                   
+            intergtated_pose_imu.position.z = p_[2];
+
+            intergtated_pose_imu.orientation.x = delta_theta[0];
+            intergtated_pose_imu.orientation.y = delta_theta[1];   
+            intergtated_pose_imu.orientation.z = delta_theta[2];                        
         }
 
 
