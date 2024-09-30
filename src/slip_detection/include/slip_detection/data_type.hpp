@@ -8,11 +8,21 @@
 
 namespace anomaly_detection
 {   
-    struct MessageType_ODOM_IMU 
+    struct MessageType_ODOM
     {
         nav_msgs::msg::Odometry::ConstSharedPtr odom_msg;
+    };
+
+    struct MessageType_ODOM_IMU : public MessageType_ODOM
+    {
         sensor_msgs::msg::Imu::ConstSharedPtr imu_msg;
     };
+
+    struct MessageType_ODOM_LO : public MessageType_ODOM
+    {
+        geometry_msgs::msg::PoseStamped::ConstSharedPtr lo_msg;
+    };
+
 
     struct IMU_Data
     {

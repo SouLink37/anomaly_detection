@@ -28,13 +28,26 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-add_executable(slip_detection 
-  main.cpp 
-  src/slip_detection.cpp
+add_executable(slip_detection_imu 
+  detect_with_imu.cpp 
+  src/slip_detection_imu.cpp
+  src/format_and_math.cpp
+)
+add_executable(slip_detection_lidar
+  detect_with_lidar.cpp 
+  src/slip_detection_lidar.cpp
   src/format_and_math.cpp
 )
 
-ament_target_dependencies(slip_detection 
+ament_target_dependencies(slip_detection_imu 
+  rclcpp 
+  message_filters
+  sensor_msgs 
+  nav_msgs
+  geometry_msgs 
+  std_msgs
+)
+ament_target_dependencies(slip_detection_lidar
   rclcpp 
   message_filters
   sensor_msgs 
@@ -43,12 +56,20 @@ ament_target_dependencies(slip_detection
   std_msgs
 )
 
-target_link_libraries(slip_detection
+target_link_libraries(slip_detection_imu
+  Eigen3::Eigen
+  # Sophus
+)
+target_link_libraries(slip_detection_lidar
   Eigen3::Eigen
   # Sophus
 )
 
-target_include_directories(slip_detection PUBLIC
+target_include_directories(slip_detection_imu PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+target_include_directories(slip_detection_lidar PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
@@ -57,7 +78,9 @@ install(DIRECTORY include/
   DESTINATION include/
 )
 
-install(TARGETS slip_detection
+install(TARGETS slip_detection_imu
   DESTINATION lib/${PROJECT_NAME})
+install(TARGETS slip_detection_lidar
+  DESTINATION lib/${PROJECT_NAME})  
 
 ament_package()

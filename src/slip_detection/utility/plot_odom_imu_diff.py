@@ -172,17 +172,7 @@ def plot_data(timestamps, imu_linear_diffs, imu_angle_diffs, odom_linear_diffs, 
 # filename = '/home/gechai/下载/27.09/1.5代样机---打滑数据采集---rom1105+driver2636/后退---触发打滑---打滑开始时开始slip话题，结束slip话题后再结束录包/self/self-0926-185600/diff_3.txt'
 # filename = '/home/gechai/下载/27.09/1.5代样机---打滑数据采集---rom1105+driver2636/后退---触发打滑---打滑开始时开始slip话题，结束slip话题后再结束录包/self/self-0926-185600/diff_angle.txt'
 
-# filename = '/home/gechai/下载/27.09/1.5代样机---打滑数据采集---rom1105+driver2636/圆管---触发打滑---打滑开始时开始slip话题，结束slip话题后再结束录包/1.8cm/self/self-0926-190514/diff_angle.txt'
-
-# filename = '/home/gechai/下载/26.09.24/log/self-0926-092305/diff_angle.txt'
-
-# filename = '/home/gechai/下载/27.09/1.5代样机---打滑数据采集---rom1105+driver2636/窄道触发打滑---打滑开始时开始slip话题，结束slip话题后再结束录包/self/self-0926-191248/diff_angle.txt'
-filename = '/home/gechai/下载/27.09/1.5代样机---打滑数据采集---rom1105+driver2636/窄道触发打滑---打滑开始时开始slip话题，结束slip话题后再结束录包/self/self-0926-191248/diff_angle_lock.txt'
-
-
-
-
-
+filename = '/home/gechai/下载/27.09/1.5代样机---打滑数据采集---rom1105+driver2636/圆管---触发打滑---打滑开始时开始slip话题，结束slip话题后再结束录包/1.8cm/self/self-0926-190514/diff_angle.txt'
 
 
 timestamps, imu_linear_diffs, imu_angle_diffs, odom_linear_diffs, odom_angle_diffs = parse_data(filename)

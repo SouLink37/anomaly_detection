@@ -19,10 +19,10 @@ namespace anomaly_detection
     typedef message_filters::Synchronizer<odom_imu_sync_policy> odom_imu_sync;
     
 
-    class SlipDetection : public rclcpp::Node
+    class SlipDetectionIMU : public rclcpp::Node
     {
     public:
-        SlipDetection();
+        SlipDetectionIMU();
         
     private:
 
