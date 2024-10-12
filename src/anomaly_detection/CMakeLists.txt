@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
 project(anomaly_detection)
-# project(slip_detection)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -8,11 +7,11 @@ endif()
 
 include_directories(
   include
-  ${generated_include_dirs}
 )
+message(STATUS "Generated include dirs: ${generated_include_dirs}")
 
 # find dependencies
-find_package(ament_cmake REQUIRED)
+find_package(ament_cmake REQUIRED)  
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
@@ -44,6 +43,8 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   ${msg_files}
   DEPENDENCIES std_msgs
 )
+rosidl_get_typesupport_target(cpp_typesupport_target
+  ${PROJECT_NAME} rosidl_typesupport_cpp)
 
 
 add_executable(slip_detection_imu 
@@ -78,56 +79,22 @@ set(dependencies
   rosidl_default_runtime
 )
 
+
 foreach(node ${anomaly_detection_node})
-ament_target_dependencies(${node} 
-${dependencies}
-)
+  ament_target_dependencies(${node} 
+    ${dependencies} 
+  )
+
+  target_link_libraries(${node} 
+    Eigen3::Eigen
+    ${cpp_typesupport_target}
+    # Sophus
+  )
+
+  install(TARGETS ${node}
+    DESTINATION lib/${PROJECT_NAME}
+  )
 endforeach()
-
-
-rosidl_get_typesupport_target(cpp_typesupport_target
-  ${PROJECT_NAME} rosidl_typesupport_cpp)
-
-target_link_libraries(slip_detection_imu
-  Eigen3::Eigen
-  "${cpp_typesupport_target}"
-  # Sophus
-)
-target_link_libraries(slip_detection_lidar
-  Eigen3::Eigen
-  "${cpp_typesupport_target}"
-  # Sophus
-)
-target_link_libraries(slip_detection_acc
-  Eigen3::Eigen
-  "${cpp_typesupport_target}"
-  # Sophus
-)
-
-target_include_directories(slip_detection_imu PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>
-)
-target_include_directories(slip_detection_lidar PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>
-)
-target_include_directories(slip_detection_acc PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>
-)
-
-install(DIRECTORY include/
-  DESTINATION include/
-)
-
-install(TARGETS slip_detection_imu
-  DESTINATION lib/${PROJECT_NAME})
-install(TARGETS slip_detection_lidar
-  DESTINATION lib/${PROJECT_NAME})  
-install(TARGETS slip_detection_acc
-  DESTINATION lib/${PROJECT_NAME})  
-
 
 
 # 导出消息生成的依赖
